@@ -6,7 +6,7 @@ from brping import Ping1D
 import serial
 
 
-
+global ser
 sensor1 = tsys01.TSYS01()
 sensor2 = ms5837.MS5837_02BA(0)
 sensor3 = Ping1D("/dev/ttyUSB0",115200)
@@ -29,9 +29,9 @@ def joystickInit():
     print("I got the joystick WOOOW")
     return js_1
 
-def serial_initialize():
-    ser = serial.Serial("/dev/ttyACM0",9600)
-    return ser
+
+ser = serial.Serial("/dev/ttyACM0",9600)
+    
 
 if not sensor2.init():
     print("Pressure Sensor could not be initialized")
@@ -114,9 +114,9 @@ def StrintPrepare():
     
     return string 
 
-def sendString():
+def sendString(ser):
     string = StrintPrepare()
-    ser = serial_initialize()
+    print(string)
     ser.write(bytearray(string,encoding = 'utf-8'))
     print(" I have written data")
     
@@ -132,5 +132,5 @@ if __name__ == "__main__":
         pingSensorData()
         a, b,c,d = joystickValue()
         print(a)
-        sendString()
+        sendString(ser)
         sleep(5)
